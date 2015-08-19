@@ -1,13 +1,13 @@
 package warehouseInventorySystem;
 
-public class updateResult {
-	String productName;
+public class InterimUpdate {
+	String productId;
 	boolean updateStatus;
 	int amountProcessed;
 	int amountRemaining;
 	String location;
 	
-	public updateResult(){
+	public InterimUpdate(){
 		
 	}
 	

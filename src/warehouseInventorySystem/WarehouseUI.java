@@ -1,16 +1,15 @@
 package warehouseInventorySystem;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 
 
 public class WarehouseUI {
-	
+	static BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
 	
 	public static void main (String args[]) {
 		final WarehouseIMS w1 = new WarehouseIMS("W1");
-		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-		
 		
 		w1.instantiateProduct("tape", "A1", 10);
 		w1.instantiateProduct("iron", "A2", 10);
@@ -29,38 +28,38 @@ public class WarehouseUI {
 						+ "\n4 to remove existing product"
 						+ "\n5 to see available stock"
 						+ "\n0 to exit");
-				int in = Integer.parseInt(input.readLine());
+				int in = Integer.parseInt(inputReader.readLine());
 				
 				switch (in) {
 				case 1:
 					System.out.println("enter product: ");
-					String prod = input.readLine();
+					String prod = inputReader.readLine();
 					System.out.println("enter amount: ");
-					int amount = Integer.parseInt(input.readLine());
+					int amount = Integer.parseInt(inputReader.readLine());
 					w1.pickProduct(prod,amount);
 					break;
 					
 				case 2:
 					System.out.println("enter product: ");
-					String prodRe = input.readLine();
+					String prodRe = inputReader.readLine();
 					System.out.println("enter amount: ");
-					int amountRe = Integer.parseInt(input.readLine());
+					int amountRe = Integer.parseInt(inputReader.readLine());
 					w1.restockProduct(prodRe,amountRe);
 					break;
 					
 				case 3:
 					System.out.println("enter product: ");
-					String prodIn = input.readLine();
+					String prodIn = inputReader.readLine();
 					System.out.println("enter location: ");
-					String locIn = input.readLine();
+					String locIn = inputReader.readLine();
 					System.out.println("enter initial stock: ");
-					int stockIn = Integer.parseInt(input.readLine());
+					int stockIn = Integer.parseInt(inputReader.readLine());
 					w1.instantiateProduct(prodIn, locIn, stockIn);
 					break;
 
 				case 4:
 					System.out.println("enter product: ");
-					String prodDel = input.readLine();
+					String prodDel = inputReader.readLine();
 					w1.deleteProduct(prodDel);
 					break;
 					
@@ -69,7 +68,8 @@ public class WarehouseUI {
 					break;
 					
 				case 0:
-					System.exit(-1);
+					inputReader.close();
+					System.exit(0);
 					
 				default:
 					System.out.println("invalid option selected");
@@ -78,8 +78,8 @@ public class WarehouseUI {
 			}
 			
 			
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println(e.toString());
 		}
 		
 		

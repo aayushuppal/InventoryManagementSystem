@@ -2,7 +2,7 @@
  * 
  */
 /**
- * Implementation of IMS per warehouse
+ * Implementation of IMS system for a warehouse
  * @author aayush uppal
  *
  */

@@ -1,33 +1,33 @@
 package warehouseInventorySystem;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 import warehouseInventorySystem.WarehouseIMS.REQTYPE;
+import static warehouseInventorySystem.WarehouseUI.inputReader;
+
 
 
 public class Product {
-	private String productName;
+	private String productId;
 	private String location;
 	
 	private int inventoryLevel;
 	
 	
-	public Product (String prodName, String loc) {
-		this.productName = prodName;
+	public Product (String prodId, String loc) {
+		this.productId = prodId;
 		this.location = loc;
 		this.inventoryLevel = 0;
 	}
 	
-	public Product (String prodName, String loc, int stock) {
-		this.productName = prodName;
+	public Product (String prodId, String loc, int stock) {
+		this.productId = prodId;
 		this.location = loc;
 		this.inventoryLevel = stock;
 	}
 
-	public String getProductName() {
-		return productName;
+	public String getProductId() {
+		return productId;
 	}
 	
 	public String getLocation() {
@@ -38,23 +38,24 @@ public class Product {
 		return inventoryLevel;
 	}
 	
-	
-	public synchronized updateResult updateProduct(String productName, int amount,REQTYPE type) {
+	/**
+	 * this synchronized implementation of the instance method on a product object ensures correct update and return values
+	 */
+	public synchronized InterimUpdate updateProduct(int amount,REQTYPE type) {
 		
-		updateResult intermediate = new updateResult();
-		intermediate.productName = this.productName;
+		InterimUpdate intermediate = new InterimUpdate();
+		intermediate.productId = productId;
 		
 		switch (type) {
 		case PICK:
-			int tmp = this.inventoryLevel >=amount ? amount : this.inventoryLevel;
+			int tmp = inventoryLevel >=amount ? amount : inventoryLevel;
 			if (tmp < amount) {
-				BufferedReader inp = new BufferedReader(new InputStreamReader(System.in));
-				System.out.print("Press Y key to continue . . . ");
+				System.out.println("only "+tmp+" available out of requested "+amount+"Press Y to pick this amount:");
 				String input ="";
 				try {
-					input = inp.readLine();
+					input = inputReader.readLine();
 				} catch (IOException e) {
-					e.printStackTrace();
+					System.out.println(e.toString());
 				}
 				if (input.equals("Y")) {
 					intermediate.amountProcessed = tmp;
@@ -74,7 +75,7 @@ public class Product {
 		case RESTOCK:
 			intermediate.amountProcessed = amount;
 			this.inventoryLevel = this.inventoryLevel + intermediate.amountProcessed;
-			intermediate.amountRemaining = 0; // because presently no max constraint
+			intermediate.amountRemaining = 0; // because presently no max constraint to stock product
 			intermediate.location = this.location;
 			intermediate.updateStatus = true;
 			break;

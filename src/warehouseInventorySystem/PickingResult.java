@@ -5,13 +5,13 @@ public class PickingResult {
 	public String Location;
 	public int requestReturned;
 	public int requestRemaining;
-	public String prodName;
+	public String prodId;
 	
-	public PickingResult (updateResult updater) {
+	public PickingResult (InterimUpdate updater) {
 		this.Location = updater.location;
 		this.requestReturned = updater.amountProcessed;
 		this.requestRemaining = updater.amountRemaining;
 		this.demandMet = updater.updateStatus;
-		this.prodName = updater.productName;
+		this.prodId = updater.productId;
 	}
 }

@@ -41,63 +41,70 @@ public class WarehouseIMS implements InventoryManagementSystem {
 		this.warehouseId = wareId;
 	}
 	
-	public Product getProduct (String prodName) throws UnknownProductException {
-		if (productMap.get(prodName) == null) {
-			throw new UnknownProductException (prodName);
+	public Product getProduct (String prodId) throws UnknownProductException {
+		if (productMap.get(prodId) == null) {
+			throw new UnknownProductException (prodId);
 		}
-		return productMap.get(prodName);
+		return productMap.get(prodId);
 	}
 	
-	public Product instantiateProduct (String prodName, String prodLocation) {
-		if (productMap.containsKey(prodName)) {
-			System.out.println(prodName+" ERROR: product already exists @ "+productMap.get(prodName).getLocation()+" use restock to add more" );
-			return productMap.get(prodName);
+	/**
+	 * 
+	 * instantiates product with 0 inventory level
+	 */
+	public Product instantiateProduct (String prodId, String prodLocation) {
+		if (productMap.containsKey(prodId)) {
+			System.out.println(prodId+" ERROR: product already exists @ "+productMap.get(prodId).getLocation()+" use restock to add more" );
+			return productMap.get(prodId);
 		} else {
-			Product temp =  new Product (prodName, prodLocation);
-			productMap.put(prodName, temp);
+			Product temp =  new Product (prodId, prodLocation);
+			productMap.put(prodId, temp);
 			return temp;
 		}
 	}
 	
-	public Product instantiateProduct (String prodName, String prodLocation, int stock) {
-		if (productMap.containsKey(prodName)) {
-			System.out.println(prodName+" ERROR: product already exists @ "+productMap.get(prodName).getLocation()+" use restock to add more" );
-			return productMap.get(prodName);
+	/**
+	 * 
+	 * instantiates product with given stock amount as inventory level
+	 */
+	public Product instantiateProduct (String prodId, String prodLocation, int stock) {
+		if (productMap.containsKey(prodId)) {
+			System.out.println(prodId+" ERROR: product already exists @ "+productMap.get(prodId).getLocation()+" use restock to add more" );
+			return productMap.get(prodId);
 		} else {
-			Product temp =  new Product (prodName, prodLocation, stock);
-			productMap.put(prodName, temp);
+			Product temp =  new Product (prodId, prodLocation, stock);
+			productMap.put(prodId, temp);
 			return temp;
 		}
 	}
 	
-	public void deleteProduct (String prodName) {
+	public void deleteProduct (String prodId) {
 		try {
-			if (this.productMap.containsKey(prodName)) {
-				this.productMap.remove(prodName);
+			if (this.productMap.containsKey(prodId)) {
+				this.productMap.remove(prodId);
 			} else {
-				throw new UnknownProductException(prodName);
+				throw new UnknownProductException(prodId);
 			}
 		} catch (UnknownProductException e) {
 			System.out.println(e.toString());
 		}
-		
 	}
 	
 	
 	
-	public PickingResult pickProduct (String productName, int amount) {
+	public PickingResult pickProduct (String productId, int amountToPick) {
 		try {
-			updateResult interim = getProduct(productName).updateProduct(productName, amount, REQTYPE.PICK);
+			InterimUpdate interim = getProduct(productId).updateProduct(amountToPick, REQTYPE.PICK);
 			if (interim.updateStatus) {
 				PickingResult pick = new PickingResult(interim);
-				System.out.println("returning: "+pick.prodName
+				System.out.println("returning: "+pick.prodId
 						+" demand met: "+pick.demandMet
 						+" @ location: "+pick.Location
-						+" request returned: "+pick.requestReturned
+						+" request processed: "+pick.requestReturned
 						+" request remaining: "+pick.requestRemaining);
 				return pick;
 			} else {
-				throw new OutOfStockException (productName);
+				throw new OutOfStockException (productId);
 			}
 		} catch (OutOfStockException e) {
 			System.out.println(e.toString());
@@ -107,13 +114,19 @@ public class WarehouseIMS implements InventoryManagementSystem {
 		return null;
 	}
 	
-	public RestockingResult restockProduct (String productName, int amount)  {
+	public RestockingResult restockProduct (String productId, int amountToRestock)  {
 		try {
-			updateResult interim = getProduct(productName).updateProduct(productName, amount, REQTYPE.RESTOCK);
+			InterimUpdate interim = getProduct(productId).updateProduct(amountToRestock, REQTYPE.RESTOCK);
 			if (interim.updateStatus) {
-				return new RestockingResult(interim);
+				RestockingResult restock = new RestockingResult(interim);
+				System.out.println("returning: "+restock.prodId
+						+" demand met: "+restock.restockStatus
+						+" @ location: "+restock.Location
+						+" request processed: "+restock.restockDone
+						+" request remaining: "+restock.restockRemaining);
+				return restock;
 			} else {
-				throw new UnknownProductException(productName);
+				throw new UnknownProductException(productId);
 			}
 		} catch (OutOfStockException e) {
 			System.out.println(e.toString());
@@ -124,9 +137,9 @@ public class WarehouseIMS implements InventoryManagementSystem {
 	}
 	
 	public void printWarehouseData() {
-		System.out.println("Product Name"+"\tLocation"+"\tInventory Level\n");
+		System.out.println("Product Id"+"\tLocation"+"\tInventory Level\n");
 		for (Product p:productMap.values()) {
-			System.out.println(p.getProductName()+"\t\t"+p.getLocation()+"\t\t"+p.getInventoryLevel()+"\n");
+			System.out.println(p.getProductId()+"\t\t"+p.getLocation()+"\t\t"+p.getInventoryLevel()+"\n");
 		}
 	}
 

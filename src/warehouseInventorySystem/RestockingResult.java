@@ -1,17 +1,17 @@
 package warehouseInventorySystem;
 
 public class RestockingResult {
-	public boolean restockDone;
+	public boolean restockStatus;
 	public String Location;
-	public int stockDone;
-	public int stockRemaining;
-	public String prodName;
+	public int restockDone;
+	public int restockRemaining;
+	public String prodId;
 	
-	public RestockingResult(updateResult interim) {
-		this.restockDone = interim.updateStatus;
+	public RestockingResult(InterimUpdate interim) {
+		this.restockStatus = interim.updateStatus;
 		this.Location = interim.location;
-		this.stockDone = interim.amountProcessed;
-		this.stockRemaining = interim.amountRemaining;
-		this.prodName = interim.productName;
+		this.restockDone = interim.amountProcessed;
+		this.restockRemaining = interim.amountRemaining;
+		this.prodId = interim.productId;
 	}
 }
