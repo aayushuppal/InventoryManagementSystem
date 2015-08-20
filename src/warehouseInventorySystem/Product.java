@@ -50,7 +50,7 @@ public class Product {
 		case PICK:
 			int tmp = inventoryLevel >=amount ? amount : inventoryLevel;
 			if (tmp < amount) {
-				System.out.println("only "+tmp+" available out of requested "+amount+"Press Y to pick this amount:");
+				System.out.println("only "+tmp+" available out of requested "+amount+" Press Y to pick this amount:");
 				String input ="";
 				try {
 					input = inputReader.readLine();

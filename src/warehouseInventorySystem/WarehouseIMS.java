@@ -4,8 +4,13 @@ import java.util.HashMap;
 
 
 public class WarehouseIMS implements InventoryManagementSystem {
+	private static WarehouseIMS singleton = new WarehouseIMS( );
+	private WarehouseIMS() { }
+	public static WarehouseIMS getInstance() {
+	      return singleton;
+	   }
+	 
 	public static enum REQTYPE { PICK, RESTOCK };
-	public String warehouseId;
 	private HashMap<String, Product> productMap = new HashMap<String, Product>();
 	
 	
@@ -37,9 +42,7 @@ public class WarehouseIMS implements InventoryManagementSystem {
 	}
 	
 	
-	public WarehouseIMS (String wareId) {
-		this.warehouseId = wareId;
-	}
+	
 	
 	public Product getProduct (String prodId) throws UnknownProductException {
 		if (productMap.get(prodId) == null) {
@@ -113,6 +116,7 @@ public class WarehouseIMS implements InventoryManagementSystem {
 		}
 		return null;
 	}
+	
 	
 	public RestockingResult restockProduct (String productId, int amountToRestock)  {
 		try {

@@ -9,7 +9,7 @@ public class WarehouseUI {
 	static BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
 	
 	public static void main (String args[]) {
-		final WarehouseIMS w1 = new WarehouseIMS("W1");
+		final WarehouseIMS w1 = WarehouseIMS.getInstance();
 		
 		w1.instantiateProduct("tape", "A1", 10);
 		w1.instantiateProduct("iron", "A2", 10);
